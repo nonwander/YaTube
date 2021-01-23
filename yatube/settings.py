@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '2=a5cmx49knbs_f%e7tagufrx3ax_=js%4!o67qa^u=dwtn$nl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True#False#
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'tests',
     'about',
     'users',
-    'posts', 
+    'posts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -141,7 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Login
 LOGIN_URL = "/auth/login/"
-LOGIN_REDIRECT_URL = "index" 
+LOGIN_REDIRECT_URL = "index"
 # LOGOUT_REDIRECT_URL = "index"
 
 #  подключаем движок filebased.EmailBackend

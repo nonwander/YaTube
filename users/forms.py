@@ -8,14 +8,15 @@ User = get_user_model()
 
 """
 
+
 class CreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
-        
+
         """ укажем модель, с которой связана создаваемая форма """
-        
+
         model = User
-        
+
         """ укажем отображаемые поля в форме и их порядок """
-        
+
         fields = ("first_name", "last_name", "username", "email")
