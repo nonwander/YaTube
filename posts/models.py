@@ -71,10 +71,21 @@ class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="follower"
+        related_name="follower",
+        verbose_name="Подписчик",
+        help_text="Подписчик на автора поста"
     )
     author = models.ForeignKey(
         User, null=True,
         on_delete=models.CASCADE,
-        related_name="following"
+        related_name="following",
+        verbose_name="Автор",
+        help_text="Автор интересного поста"
     )
+
+    class Meta:
+        """Проверка на уникальность подписки перед сохранением"""
+        constraints = [models.UniqueConstraint(
+            fields=["author", "user"],
+            name="unique_object"
+        )]

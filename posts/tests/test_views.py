@@ -223,9 +223,9 @@ class PostsPagesTests(TestCase):
                 form_field = response.context.get("form").fields.get(value)
                 self.assertIsInstance(form_field, expected)
 
-    def test_user_follow_and_unfollow(self):
-        """Подписаться можно только на одного автора. Авторизованный
-        пользователь подписывается на других пользователей и отписывается"""
+    def test_user_follow(self):
+        """Авторизованный пользователь подписывается на других пользователей.
+        Подписаться можно только на одного выбранного автора."""
         expected_url = reverse(
             "profile_follow", kwargs={"username": self.following}
         )
@@ -235,7 +235,23 @@ class PostsPagesTests(TestCase):
         # Проверяем ленту подписчиков автора, кто не подписан на following
         expected_follows = Follow.objects.filter(author=self.author)
         self.assertEqual(expected_follows.count(), 0)
-        # Отписываем фоловера
+        # Удаляем подписку
         Follow.objects.get(user=self.follower, author=self.following).delete()
+        expected_follows = Follow.objects.filter(author=self.following)
+        self.assertEqual(expected_follows.count(), 0)
+
+    def test_user_unfollow(self):
+        """Авторизованный пользователь отписывается от других пользователей"""
+        expected_url_follow = reverse(
+            "profile_follow", kwargs={"username": self.following}
+        )
+        self.authorized_follower.get(expected_url_follow)
+        expected_follows = Follow.objects.filter(author=self.following)
+        self.assertEqual(expected_follows.count(), 1)
+        # Отписываем фоловера
+        expected_url_unfollow = reverse(
+            "profile_unfollow", kwargs={"username": self.following}
+        )
+        self.authorized_follower.get(expected_url_unfollow)
         expected_follows = Follow.objects.filter(author=self.following)
         self.assertEqual(expected_follows.count(), 0)
