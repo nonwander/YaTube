@@ -13,7 +13,7 @@ per_page = settings.PER_PAGE
 
 
 def index(request):
-    post_list = Post.objects.select_related("group").order_by("-pub_date")
+    post_list = Post.objects.select_related("group")
     paginator = Paginator(post_list, per_page)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
@@ -139,10 +139,7 @@ def add_comment(request, username, post_id):
 
 @login_required
 def follow_index(request):
-    authors = Follow.objects.filter(user=request.user)
-    post_list = []
-    for author in authors:
-        post_list = Post.objects.filter(author__following__user=request.user)
+    post_list = Post.objects.filter(author__following__user=request.user)
     paginator = Paginator(post_list, 10)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
@@ -156,10 +153,8 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    if request.user != author and not Follow.objects.filter(
-        user=request.user, author=author
-    ).exists():
-        Follow.objects.create(user=request.user, author=author)
+    if request.user != author:
+        Follow.objects.get_or_create(user=request.user, author=author)
     return redirect("profile", username=username)
 
 
